@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Searchy</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="searchy.css">
+</head>
+
+<body>
+
+  <header>
+    <h1 class="Title">Search for Voters</h1>
+  </header>
+
+  <div class="Wrapper Wrapper--loading">
+    <svg class="Spinner">
+      <circle cx="20" cy="20" r="18"></circle>
+    </svg>
+    <input class="Input" data-js="input" />
+    <table class="Results" data-js="results" />
+  </div>
+
+  <script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
+  <script type="text/javascript" src="searchy.js"></script>
+</body>
+
+</html>

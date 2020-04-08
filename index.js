@@ -61,7 +61,6 @@ function searchByAddress({ query, voters }) {
 }
 
 function renderResults(results) {
-    console.log(results)
     if (!results.length) return '';
 
     return `

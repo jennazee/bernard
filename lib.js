@@ -62,6 +62,7 @@ function searchByAddress({ query, voters }) {
 
 function renderResults(results) {
     if (!results.length) return '';
+    console.log("RENDERING!");
 
     return `
     <thead class="Results-header">

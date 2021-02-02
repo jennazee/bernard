@@ -6,7 +6,7 @@ const { Client } = require("pg");
 
 const client = new Client({
   connectionString:
-    process.env.HEROKU_POSTGRESQL_AMBER_URL || "postgresql://bernard-pgh-local",
+    "postgres://nick:admin@localhost:5432/bernard-pgh-local",
 });
 
 client.connect();
@@ -22,19 +22,32 @@ app.get("/", (req, res) => {
 });
 
 app.get("/query", (req, res) => {
+  let url = req.url;
+  let where = '';
+
+  // If the query is a name query, search the first name, last name fields
+  if(url.includes("?name")){
+  	let param = url.split("=");
+  	where += ' WHERE "First Name" LIKE ' + "'%" + param[1].toUpperCase() + "%'" + ' OR "Last Name" LIKE ' + "'%" + param[1].toUpperCase() + "%' ";
+  // If the query is an address query, search by street name
+  } else if(url.includes("?address")){
+  	let param = url.split("=");
+  	where += ' WHERE "Street Name" LIKE ' + "'%" + param[1].toUpperCase() + "%' ";
+  }
+
+  // Construct the query
+  let query = 'SELECT "Last Name", "First Name", "Gender", "Party Code", "Street Name", "City", "Zip", "ID Number" FROM ' + '"public"."CityOnly"' + where + "LIMIT 10;";
+
   client.query(
-    "SELECT table_schema,table_name FROM information_schema.tables;",
+  	query,
     (err, res) => {
-      console.log("yey");
-      if (err) throw err;
-      console.log(res);
-      for (let row of res.rows) {
-        console.log(JSON.stringify(row));
+      for(row in res.rows){
+      	console.log(res.rows[row]);
       }
-      client.end();
+      // client.end();
     }
   );
-  res.send("HELLO");
+  res.json(res.rows);
 });
 
 app.listen(port, () => {

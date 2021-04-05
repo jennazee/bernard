@@ -218,12 +218,28 @@ function convertToCSV(objArray) {
 
 function exportCSVFile(items) {
   const jsonObject = JSON.stringify(items);
-
   const csv = convertToCSV(jsonObject);
-
   const exportedFilename = "voters.csv";
-
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+  // Create the request to the server to send the CSV
+  var formData = new FormData();
+  formData.append("file", csv);
+  formData.append("personName", "NAMExxx");
+
+  let body = {
+    name: "XXXXX",
+    file: csv
+  };
+
+  var req = new XMLHttpRequest();
+  req.open("POST", `/api/mail`, true);
+  req.send(formData);
+
+  req.onload = function () {
+    console.log(req.response);
+  };
+
   if (navigator.msSaveBlob) {
     // IE 10+
     navigator.msSaveBlob(blob, exportedFilename);

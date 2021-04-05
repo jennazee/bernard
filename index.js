@@ -1,11 +1,12 @@
 const express = require("express");
+const nodemailer = require("nodemailer");
 const app = express();
 const port = process.env.PORT || 8000;
 
 const { Client } = require("pg");
 
 const client = new Client({
-  connectionString:
+  connectionString: 
     process.env.DATABASE_URL || "postgres://sean@localhost:5432/bernard-local",
   ssl: { rejectUnauthorized: false },
 });
@@ -75,4 +76,53 @@ app.get("/query", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
+});
+
+app.post('/api/mail', (req, res) => {
+  // Create a transporter to send the mail
+  let transporter = nodemailer.createTransport({
+      pool: true,
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // use TLS
+      auth: {
+        user: "field@uniteforpa.com",
+        pass: "iymesczsuixgltnk"
+        // pass: "tqiyrqyjutrusfwa"
+      }
+  });
+
+  console.log("________________");
+  console.log(req);
+  console.log("________________");
+  console.log(req.body);
+  console.log("________________");
+  console.log(req['name']);
+  console.log("________________");
+  console.log(req.file);
+  console.log("________________");
+
+
+  // Create mail options
+  let mailOptions = {
+      from: 'Nick Mullen',
+      to: "mullennj@gmail.com",
+      subject: "Test",
+      text: "TEST",
+      attachments: [
+        {
+          filename: "voters.csv",
+          content: req
+        }
+      ]
+  }
+
+  // Send the message
+  transporter.sendMail(mailOptions, function (err, res) {
+      if(err){
+          console.log('Error');
+      } else {
+          console.log('Email Sent');
+      }
+  })
 });

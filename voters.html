@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Searchy</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="searchy.css">
+  <script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <h1 class="Title">Search for Voters</h1>
+  </header>
+
+  <div class="Wrapper Wrapper--loading">
+    <svg class="Spinner">
+      <circle cx="20" cy="20" r="18"></circle>
+    </svg>
+
+    <div class="SearchWrapper">
+      <label for="email">Enter Your Email</label>
+      <input class="Input" data-js="input-email" name="email" placeholder="Your email">
+    </div>
+
+    <div class="SearchWrapper">
+      <label for="name">Search by Name</label>
+      <input class="Input" data-js="input-name" name="name" placeholder="Enter at least three letters">
+      <table class="Results" data-js="name-results"></table>
+    </div>
+
+    <div class="SearchWrapper">
+      <label for="address">Search by Address</label>
+      <input class="Input" data-js="input-address" name="address" placeholder="Enter at least three letters">
+      <table class="Results" data-js="address-results"></table>
+    </div>
+  </div>
+
+  <button data-js="export-button">Send Voters</button>
+  <div class="Thanks">
+    <p>Thanks for sending us some voters!</p>
+  </div>
+</body>
+
+</html>

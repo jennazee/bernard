@@ -29,6 +29,12 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+
+app.get("/thanks", (req, res) => {
+  res.sendFile(__dirname + "/thanks.html");
+});
+
+
 // this whole query is immensely vulnerable to SQL injection
 // but it's fine
 app.get("/query", async (req, res) => {
@@ -88,41 +94,31 @@ app.post('/api/mail', (req, res) => {
       auth: {
         user: "field@uniteforpa.com",
         pass: "iymesczsuixgltnk"
-        // pass: "tqiyrqyjutrusfwa"
       }
   });
 
-  console.log("________________");
-  console.log(req);
-  console.log("________________");
-  console.log(req.body);
-  console.log("________________");
-  console.log(req['name']);
-  console.log("________________");
-  console.log(req.file);
-  console.log("________________");
-
+  res.redirect(301, "/thanks");
 
   // Create mail options
-  let mailOptions = {
-      from: 'Nick Mullen',
-      to: "mullennj@gmail.com",
-      subject: "Test",
-      text: "TEST",
-      attachments: [
-        {
-          filename: "voters.csv",
-          content: req
-        }
-      ]
-  }
+  // let mailOptions = {
+  //     from: 'Searchy',
+  //     to: "field@uniteforpa.com",
+  //     subject: "Voterfile",
+  //     text: "Voter file",
+  //     attachments: [
+  //       {
+  //         filename: "voters.csv",
+  //         content: req
+  //       }
+  //     ]
+  // }
 
-  // Send the message
-  transporter.sendMail(mailOptions, function (err, res) {
-      if(err){
-          console.log('Error');
-      } else {
-          console.log('Email Sent');
-      }
-  })
+  // // Send the message
+  // transporter.sendMail(mailOptions, function (err, res) {
+  //     if(err){
+  //         console.log('Error');
+  //     } else {
+  //         console.log('Email Sent');
+  //     }
+  // })
 });

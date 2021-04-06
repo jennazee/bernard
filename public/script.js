@@ -97,9 +97,7 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 function renderResults(results) {
-  console.log("RENDERING!");
   results = JSON.parse(results);
-  console.log(results);
   if (!results.length) return "";
 
   return `
@@ -203,8 +201,11 @@ function convertToCSV(objArray) {
   const array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   let str = "";
 
+  // Add the searcher's email to beginning of each line
+  var searcherEmail = document.querySelector('[data-js="input-email"]').value;
+
   for (let i = 0; i < array.length; i++) {
-    let line = "";
+    let line = searcherEmail;
     for (let index in array[i]) {
       if (line != "") line += ",";
       line += array[i][index];
@@ -225,12 +226,7 @@ function exportCSVFile(items) {
   // Create the request to the server to send the CSV
   var formData = new FormData();
   formData.append("file", csv);
-  formData.append("personName", "NAMExxx");
-
-  let body = {
-    name: "XXXXX",
-    file: csv
-  };
+  // formData.append("personName", "NAMExxx");
 
   var req = new XMLHttpRequest();
   req.open("POST", `/api/mail`, true);
@@ -240,21 +236,22 @@ function exportCSVFile(items) {
     console.log(req.response);
   };
 
-  if (navigator.msSaveBlob) {
-    // IE 10+
-    navigator.msSaveBlob(blob, exportedFilename);
-  } else {
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      // feature detection
-      // Browsers that support HTML5 download attribute
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", exportedFilename);
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  }
+
+  // if (navigator.msSaveBlob) {
+  //   // IE 10+
+  //   navigator.msSaveBlob(blob, exportedFilename);
+  // } else {
+  //   const link = document.createElement("a");
+  //   if (link.download !== undefined) {
+  //     // feature detection
+  //     // Browsers that support HTML5 download attribute
+  //     const url = URL.createObjectURL(blob);
+  //     link.setAttribute("href", url);
+  //     link.setAttribute("download", exportedFilename);
+  //     link.style.visibility = "hidden";
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   }
+  // }
 }

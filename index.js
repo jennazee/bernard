@@ -29,6 +29,9 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+app.get("/voters", (req, res) => {
+  res.sendFile(__dirname + "/voters.html");
+});
 
 app.get("/thanks", (req, res) => {
   res.sendFile(__dirname + "/thanks.html");

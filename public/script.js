@@ -188,7 +188,7 @@ function searchByAddress({ query, voters }) {
 }
 
 function exportResults(voters) {
-  const selections = voters
+  const selections = (voters || [])
     .filter((voter) => voter.isSelected)
     .map((voter) => {
       delete voter.isSelected;
@@ -233,7 +233,7 @@ function exportCSVFile(items) {
   req.send(formData);
 
   req.onload = function () {
-    console.log(req.response);
+    window.location = '/thanks';
   };
 
 

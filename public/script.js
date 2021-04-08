@@ -118,7 +118,7 @@ function renderResults(results) {
               }" ${result.isSelected ? "checked" : ""}></td>${Object.keys(
                 result
               )
-                .filter((value) => value !== "isSelected")
+                .filter((value) => value !== "isSelected" && (fieldsToDisplay.indexOf(value) > -1))
                 .map(
                   (key) => `<td class="Results-row_cell">${result[key]}</td>`
                 )

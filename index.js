@@ -103,25 +103,25 @@ app.post('/api/mail', (req, res) => {
   res.redirect(301, "/thanks");
 
   // Create mail options
-  // let mailOptions = {
-  //     from: 'Searchy',
-  //     to: "field@uniteforpa.com",
-  //     subject: "Voterfile",
-  //     text: "Voter file",
-  //     attachments: [
-  //       {
-  //         filename: "voters.csv",
-  //         content: req
-  //       }
-  //     ]
-  // }
+  let mailOptions = {
+      from: 'Searchy',
+      to: "field@uniteforpa.com",
+      subject: "Voterfile",
+      text: "Voter file",
+      attachments: [
+        {
+          filename: "voters.csv",
+          content: req
+        }
+      ]
+  }
 
-  // // Send the message
-  // transporter.sendMail(mailOptions, function (err, res) {
-  //     if(err){
-  //         console.log('Error');
-  //     } else {
-  //         console.log('Email Sent');
-  //     }
-  // })
+  // Send the message
+  transporter.sendMail(mailOptions, function (err, res) {
+      if(err){
+          console.log('Error');
+      } else {
+          console.log('Email Sent');
+      }
+  })
 });

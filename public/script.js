@@ -100,10 +100,12 @@ function renderResults(results) {
   results = JSON.parse(results);
   if (!results.length) return "";
 
+  const fieldsToDisplay = ['Last Name', 'First Name', 'Street Name', 'City', 'Zip']
+
   return `
     <thead class="Results-header">
         <tr><th class="Results-header_cell"></th>${Object.keys(results[0])
-          .filter((value) => value !== "isSelected")
+          .filter((value) => value !== "isSelected" && (fieldsToDisplay.indexOf(value) > -1))
           .map((key) => `<th class="Results-header_cell">${key}</th>`)
           .join("")}</tr>
     </thead>

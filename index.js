@@ -100,7 +100,7 @@ app.post('/api/mail', (req, res) => {
       }
   });
 
-  res.redirect(301, "/thanks");
+  // res.redirect(301, "/thanks");
 
   // Create mail options
   let mailOptions = {

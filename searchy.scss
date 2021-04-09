@@ -65,12 +65,16 @@ body {
     border: $border;
 }
 
-button {
+.Button {
     background-color: $lightBlue;
     padding: 12px;
-    font-size: inherit;
+    font-size: 30px;
     font-family: inherit;
     border: $border;
+    margin-left: 12px;
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
 }
 
 svg.Spinner {

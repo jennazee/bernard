@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "browserify index.js -o searchy.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-lodash ] ] -t uglifyify",
-    "sass": "sass searchy.scss:searchy.css --style compressed"
+    "sass": "sass searchy.scss:searchy.css --style compressed; cp searchy.css public/searchy.css"
   },
   "author": "",
   "license": "ISC",

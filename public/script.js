@@ -190,6 +190,7 @@ function searchByAddress({ query, voters }) {
 }
 
 function exportResults(voters) {
+  console.log('jenna click')
   const selections = (voters || [])
     .filter((voter) => voter.isSelected)
     .map((voter) => {
@@ -222,8 +223,8 @@ function convertToCSV(objArray) {
 function exportCSVFile(items) {
   const jsonObject = JSON.stringify(items);
   const csv = convertToCSV(jsonObject);
-  const exportedFilename = "voters.csv";
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  // const exportedFilename = "voters.csv";
+  // const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
 
   // Create the request to the server to send the CSV
   var formData = new FormData();
@@ -231,6 +232,7 @@ function exportCSVFile(items) {
   // formData.append("personName", "NAMExxx");
 
   var req = new XMLHttpRequest();
+  console.log('jenna sending request')
   req.open("POST", `/api/mail`, true);
   req.send(formData);
 

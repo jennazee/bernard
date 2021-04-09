@@ -1,4 +1,5 @@
 const express = require("express");
+const formidableMiddleware = require('express-formidable');
 const nodemailer = require("nodemailer");
 const app = express();
 const port = process.env.PORT || 8000;
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded());
 
 app.use(express.static("public"));
+app.use(formidableMiddleware());
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
@@ -100,7 +102,9 @@ app.post('/api/mail', (req, res) => {
       }
   });
 
-  // res.redirect(301, "/thanks");
+  const file = req.fields.file;
+
+  res.redirect(301, "/thanks");
 
   // Create mail options
   let mailOptions = {
@@ -111,7 +115,7 @@ app.post('/api/mail', (req, res) => {
       attachments: [
         {
           filename: "voters.csv",
-          content: req
+          content: file,
         }
       ]
   }

@@ -25,33 +25,33 @@ window.addEventListener("DOMContentLoaded", function () {
       //     '[data-js="name-results"]'
       //   ).innerHTML = renderResults(searchByName({ query: nameQuery, voters }));
     });
-  document
-    .querySelector('[data-js="input-address"]')
-    .addEventListener("keyup", (e) => {
-      addressQuery = e.target.value;
-      nameQuery = e.target.value;
-      var req = new XMLHttpRequest();
-      req.open("GET", `/query?address=${encodeURIComponent(nameQuery)}`, true);
-      req.send();
-      req.onload = function () {
-        console.log(typeof req.response);
-        console.log(req.response);
-      };
-      req.onreadystatechange = function () {
-        console.log("ORSTC");
-        console.log(req.responseText);
-        if (req.readyState == XMLHttpRequest.DONE) {
-          // console.log(req.response);
-          document.querySelector(
-            '[data-js="address-results"]'
-          ).innerHTML = renderResults(req.response);
-          voters = JSON.parse(req.response);
-        }
-      };
-      // document.querySelector(
-      //   '[data-js="address-results"]'
-      // ).innerHTML = renderResults(req.response);
-    });
+  // document
+  //   .querySelector('[data-js="input-address"]')
+  //   .addEventListener("keyup", (e) => {
+  //     addressQuery = e.target.value;
+  //     nameQuery = e.target.value;
+  //     var req = new XMLHttpRequest();
+  //     req.open("GET", `/query?address=${encodeURIComponent(nameQuery)}`, true);
+  //     req.send();
+  //     req.onload = function () {
+  //       console.log(typeof req.response);
+  //       console.log(req.response);
+  //     };
+  //     req.onreadystatechange = function () {
+  //       console.log("ORSTC");
+  //       console.log(req.responseText);
+  //       if (req.readyState == XMLHttpRequest.DONE) {
+  //         // console.log(req.response);
+  //         document.querySelector(
+  //           '[data-js="address-results"]'
+  //         ).innerHTML = renderResults(req.response);
+  //         voters = JSON.parse(req.response);
+  //       }
+  //     };
+  //     // document.querySelector(
+  //     //   '[data-js="address-results"]'
+  //     // ).innerHTML = renderResults(req.response);
+  //   });
 
   document
     .querySelector('[data-js="name-results"]')
@@ -65,30 +65,30 @@ window.addEventListener("DOMContentLoaded", function () {
           voter.isSelected = false;
         }
 
-        document.querySelector(
-          '[data-js="address-results"]'
-        ).innerHTML = renderResults(
-          searchByAddress({ query: addressQuery, voters })
-        );
+        // document.querySelector(
+        //   '[data-js="address-results"]'
+        // ).innerHTML = renderResults(
+        //   searchByAddress({ query: addressQuery, voters })
+        // );
       }
     });
-  document
-    .querySelector('[data-js="address-results"]')
-    .addEventListener("change", (e) => {
-      if (e.target.matches("input")) {
-        const id = e.target.dataset.id;
-        const voter = voters.find((v) => v["ID Number"] === id);
-        if (e.target.checked) {
-          voter.isSelected = true;
-        } else {
-          voter.isSelected = false;
-        }
+  // document
+  //   .querySelector('[data-js="address-results"]')
+  //   .addEventListener("change", (e) => {
+  //     if (e.target.matches("input")) {
+  //       const id = e.target.dataset.id;
+  //       const voter = voters.find((v) => v["ID Number"] === id);
+  //       if (e.target.checked) {
+  //         voter.isSelected = true;
+  //       } else {
+  //         voter.isSelected = false;
+  //       }
 
-        document.querySelector(
-          '[data-js="name-results"]'
-        ).innerHTML = renderResults(searchByName({ query: nameQuery, voters }));
-      }
-    });
+  //       document.querySelector(
+  //         '[data-js="name-results"]'
+  //       ).innerHTML = renderResults(searchByName({ query: nameQuery, voters }));
+  //     }
+  //   });
   document
     .querySelector('[data-js="export-button"]')
     .addEventListener("click", (e) => {

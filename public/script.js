@@ -7,6 +7,16 @@ window.addEventListener("DOMContentLoaded", function () {
   document
     .querySelector(".Wrapper--loading")
     .classList.remove("Wrapper--loading");
+
+  document
+    .querySelector('[data-js="input-email"]')
+    .addEventListener("keyup", (e) => {
+      email = e.target.value;
+      if (email.indexOf('@') > -1) {
+        document.querySelector(".SearchWrapper--hidden").classList.remove("SearchWrapper--hidden");
+      }
+    });
+  
   document
     .querySelector('[data-js="input-name"]')
     .addEventListener("keyup", (e) => {

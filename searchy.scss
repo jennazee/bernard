@@ -43,9 +43,13 @@ body {
     padding: 12px 12px 36px 12px;
 
     label {
-        width: 130px;
+        width: 170px;
         display: inline-block;
     }
+}
+
+.SearchWrapper--hidden {
+    display: none;
 }
 
 .Results {

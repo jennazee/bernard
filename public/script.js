@@ -126,7 +126,10 @@ function queryMatchesVoterField({ normalizedQuery, voter, field }) {
 }
 
 function exportResults() {
-  const selections = Object.values(saved).map((savee) => delete savee.isSelected);
+  const selections = Object.values(saved).map((voter) => {
+    delete voter.isSelected;
+    return voter;
+  });
   exportCSVFile(selections);
 }
 

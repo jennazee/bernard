@@ -109,7 +109,7 @@ app.post('/api/mail', (req, res) => {
   // Create mail options
   let mailOptions = {
       from: 'Searchy',
-      to: "jenna.zeigen@gmail.com",
+      to: "field@uniteforpa.com",
       subject: "Voterfile",
       text: "Voter file",
       attachments: [

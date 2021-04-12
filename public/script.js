@@ -72,6 +72,11 @@ window.addEventListener("DOMContentLoaded", function () {
     document.querySelector([
       '[data-js="name-results"]',
     ]).innerHTML = renderResults(searchResults);
+
+    if (Object.keys(saved).length) {
+      const hidden = document.querySelector(".SavedWrapper--hidden")
+      if (hidden) hidden.classList.remove("SavedWrapper--hidden");
+    }
   }
 
   document

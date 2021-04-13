@@ -65,8 +65,8 @@ window.addEventListener("DOMContentLoaded", function () {
       '[data-js="name-results"]',
     ]).innerHTML = renderResults(searchResults);
 
-    
-    if (Object.keys(saved).length) {
+    const numVoters = Object.keys(saved).length
+    if (numVoters) {
       const hidden = document.querySelector(".SavedWrapper--hidden")
       if (hidden) hidden.classList.remove("SavedWrapper--hidden");
     } else {
@@ -74,7 +74,7 @@ window.addEventListener("DOMContentLoaded", function () {
       savedWrapper.classList.add("SavedWrapper--hidden"); 
     }
 
-    if (saved.length) document.querySelector(['[data-js="saved-count"]']).innerHTML = `COUNT: ${saved.length} voters`;
+    if (numVoters) document.querySelector(['[data-js="saved-count"]']).innerHTML = `COUNT: ${numVoters} voters`;
   }
 
   document

@@ -1,20 +1,46 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
+@import url('https://fonts.googleapis.com/css2?family=Orelega+One&display=swap');
 
 $spinnerSize: 40;
-$lightestBlue: rgba(0, 0, 255, .1);
-$lightBlue: rgba(0, 0, 255, .3);
-$border: 1px black solid;
+$lightBlue:    #00bcd4;
+$lightestBlue: #ebf5f7;
+$border: 0px;
+
+header {
+    background-color: $lightBlue;
+    color: white;
+    max-width: 960px;
+    padding-left: calc((100vw - 960px) / 2);
+    padding-right: calc((100vw - 960px) / 2);
+    margin-top: -22px;
+    padding-bottom: 40px;
+    padding-top: 80px;
+    margin-bottom: 40px;
+}
 
 body {
-    font-family: 'Source Sans Pro', Trebuchet MS, sans-serif;
-    background: $lightestBlue;
+    font-family: "Source Sans Pro",Trebuchet MS,sans-serif;
+    margin: auto;
+    margin-top: auto;
+    background-color: white;
 }
+
+h1 { 
+    font-family: "Orelega One", Trebuchet MS, serif;
+    font-weight: bold;
+ }
 
 .Wrapper {
   svg.Spinner {
     display: none;
   }
 }
+
+.Wrapper {
+    max-width: 960px;
+    margin: auto;
+}
+
 
 .Wrapper--loading {
   svg.Spinner {
@@ -35,8 +61,10 @@ body {
     height: 30px;
     font-size: 18px;
     padding: 4px 12px;
-    border: $border;
+    border: 1px $lightBlue solid;
+    border-color: $lightBlue;
     font-family: inherit;
+    border-radius: 5px;
 }
 
 .SearchWrapper, .SavedWrapper {
@@ -53,32 +81,76 @@ body {
 }
 
 .Results {
-    border: $border;
+    border: none;
     margin-top: 20px;
     border-collapse: collapse;
+    width:100%;
 }
 
 .Results-row:nth-child(even) {
-    background: $lightBlue;
-    border: $border;
+    background: $lightestBlue;
+    border: none;
 }
 
 .Results-row_cell, .Results-header_cell {
-    padding: 12px;
+    padding: 6px;
     text-align: left;
     border: $border;
 }
 
 .Button {
     background-color: $lightBlue;
+    color: white;
     padding: 12px;
-    font-size: 30px;
+    font-size: 18pt;
     font-family: inherit;
-    border: $border;
+    border: 0px;
     margin-top: 12px;
     text-decoration: none;
-    color: #000;
     display: inline-block;
+    border-radius:10px;
+}
+
+.Button--white {
+    background-color: white;
+    color: $lightBlue;
+}
+
+.Results-header {
+    background-color: $lightBlue;
+    color: white;
+}
+
+.title.bar {
+    height: 80px;
+    background-color: $lightBlue;
+    position: fixed;
+    width: 100vw;
+    padding-left: calc((100vw - 960px) / 2);
+    color: white;
+}
+
+h1 {
+    font-family: "Orelega One";
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+}
+
+.floaty-button {
+    position: fixed;
+    bottom: 0;
+    padding: auto;
+    width: 100vw;
+    background-color: $lightBlue;
+    height: 80px;
+}
+
+.floaty-button .Button {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 35%;
 }
 
 svg.Spinner {

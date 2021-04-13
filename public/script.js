@@ -21,17 +21,9 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   
   document
-    .querySelector('[data-js="input-name"]')
-    .addEventListener("keyup", (e) => {
+    .querySelector('[data-js="search-button"]')
+    .addEventListener("click", (e) => {
       nameQuery = e.target.value.trim();
-
-      // clear results when it's an empty query
-      if (!nameQuery.length) {
-        document.querySelector([
-          '[data-js="name-results"]',
-        ]).innerHTML = '';
-        return;
-      }
 
       var req = new XMLHttpRequest();
       req.open("GET", `/query?name=${encodeURIComponent(nameQuery)}`, true);
@@ -73,9 +65,13 @@ window.addEventListener("DOMContentLoaded", function () {
       '[data-js="name-results"]',
     ]).innerHTML = renderResults(searchResults);
 
+    
     if (Object.keys(saved).length) {
       const hidden = document.querySelector(".SavedWrapper--hidden")
       if (hidden) hidden.classList.remove("SavedWrapper--hidden");
+    } else {
+      const savedWrapper = document.querySelector(".SavedWrapper")
+      savedWrapper.classList.add("SavedWrapper--hidden"); 
     }
   }
 

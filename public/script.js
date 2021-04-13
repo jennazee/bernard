@@ -74,7 +74,7 @@ window.addEventListener("DOMContentLoaded", function () {
       savedWrapper.classList.add("SavedWrapper--hidden"); 
     }
 
-    document.querySelector(['data-js="saved-count"']).innerHTML = `COUNT: ${saved.length} voters`;
+    if (saved.length) document.querySelector(['[data-js="saved-count"]']).innerHTML = `COUNT: ${saved.length} voters`;
   }
 
   document

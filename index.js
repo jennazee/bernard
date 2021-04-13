@@ -78,7 +78,7 @@ app.get("/query", async (req, res) => {
     'SELECT "Last Name", "First Name", "Gender", "Party Code", "House Number" || "House Number Suffix" AS "House Number", "Street Name", "City", "Zip", "Home Phone", "ID Number" FROM ' +
     '"public"."ALLEGHENY FVE 20210329"' +
     where +
-    'ORDER BY "Last Name", "First Name" LIMIT 20;';
+    'ORDER BY "Last Name", "First Name" LIMIT 50;';
 
   const queryres = await client.query(query);
 

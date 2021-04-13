@@ -23,7 +23,7 @@ window.addEventListener("DOMContentLoaded", function () {
   document
     .querySelector('[data-js="search-button"]')
     .addEventListener("click", (e) => {
-      nameQuery = e.target.value.trim();
+      nameQuery = document.querySelector('[data-js="input-name"]').value.trim();
 
       var req = new XMLHttpRequest();
       req.open("GET", `/query?name=${encodeURIComponent(nameQuery)}`, true);

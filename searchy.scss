@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Orelega+One&display=swap');
 
 $spinnerSize: 40;
-$lightBlue:    #00bcd4;
+$lightBlue:    #007591;
 $lightestBlue: #ebf5f7;
 $border: 0px;
 
@@ -18,17 +18,40 @@ header {
     margin-bottom: 40px;
 }
 
+.unitelogo {
+    position: fixed;
+    top: 2px;
+    right: 0px;
+    width: 130px;
+    padding-right: calc((100vw - 960px) / 2);
+}
+
+header a {
+    color: white;
+    font-weight: bold;
+}
+
 body {
     font-family: "Source Sans Pro",Trebuchet MS,sans-serif;
     margin: auto;
     margin-top: auto;
     background-color: white;
+    font-size: 14pt;
 }
 
 h1 { 
     font-family: "Orelega One", Trebuchet MS, serif;
     font-weight: bold;
  }
+
+h2 {
+    margin: 20px;
+    font-size: 24pt;
+}
+
+p {
+    margin: 20px;
+}
 
 .Wrapper {
   svg.Spinner {
@@ -57,7 +80,6 @@ h1 {
 }
 
 .Input {
-    width: 500px;
     height: 30px;
     font-size: 18px;
     padding: 4px 12px;
@@ -69,7 +91,7 @@ h1 {
 
 .SearchWrapper, .SavedWrapper {
     padding: 12px 12px 36px 12px;
-
+    overflow-x: auto;
     label {
         width: 170px;
         display: inline-block;
@@ -85,6 +107,7 @@ h1 {
     margin-top: 20px;
     border-collapse: collapse;
     width:100%;
+    
 }
 
 .Results-row:nth-child(even) {
@@ -121,7 +144,7 @@ h1 {
     color: white;
 }
 
-.title.bar {
+.titlebar {
     height: 80px;
     background-color: $lightBlue;
     position: fixed;
@@ -135,6 +158,8 @@ h1 {
     font-weight: bold;
     position: absolute;
     top: 10px;
+    margin: 20px;
+    font-size: 24pt;
 }
 
 .floaty-button {

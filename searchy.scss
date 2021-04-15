@@ -87,14 +87,16 @@ p {
     border-color: $lightBlue;
     font-family: inherit;
     border-radius: 5px;
+    width: 220px;
 }
 
 .SearchWrapper, .SavedWrapper {
     padding: 12px 12px 36px 12px;
     overflow-x: auto;
+
     label {
-        width: 170px;
-        display: inline-block;
+        display: block;
+        padding-bottom: 12px;
     }
 }
 

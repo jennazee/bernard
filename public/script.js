@@ -20,10 +20,22 @@ window.addEventListener("DOMContentLoaded", function () {
       }
     });
   
-  document
-    .querySelector('[data-js="search-button"]')
-    .addEventListener("click", (e) => {
-      nameQuery = document.querySelector('[data-js="input-name"]').value.trim();
+    document
+    .querySelector('[data-js="input-name"]')
+    .addEventListener("keyup", (e) => {
+      nameQuery = e.target.value.trim();
+
+      // clear results when it's an empty query
+      if (!nameQuery.length) {
+        document.querySelector([
+          '[data-js="name-results"]',
+        ]).innerHTML = '';
+        return;
+      }
+
+      if (nameQuery.length < 3) {
+        return;
+      }
 
       var req = new XMLHttpRequest();
       req.open("GET", `/query?name=${encodeURIComponent(nameQuery)}`, true);

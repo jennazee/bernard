@@ -4,6 +4,7 @@
 const saved = {};
 let searchResults = [];
 const idKey = "ID Number";
+let hasAutoScrolled = false;
 
 window.addEventListener("DOMContentLoaded", function () {
   document
@@ -67,6 +68,11 @@ window.addEventListener("DOMContentLoaded", function () {
         delete saved[id];
         voter.isSelected = false;
       }
+    }
+
+    if (!hasAutoScrolled) {
+      document.querySelector('[data-js="input-email"]').scrollIntoView(true);
+      hasAutoScrolled = true;
     }
 
     document.querySelector([

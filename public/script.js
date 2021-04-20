@@ -187,6 +187,6 @@ function exportCSVFile(items) {
   req.send(formData);
 
   req.onload = function () {
-    window.location = '/thanks';
+    window.location = '/mailer';
   };
 }

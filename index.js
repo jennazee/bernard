@@ -35,6 +35,10 @@ app.get("/voters", (req, res) => {
   res.sendFile(__dirname + "/voters.html");
 });
 
+app.get("/mailer", (req, res) => {
+  res.sendFile(__dirname + "/mailer.html");
+});
+
 app.get("/thanks", (req, res) => {
   res.sendFile(__dirname + "/thanks.html");
 });
@@ -104,7 +108,7 @@ app.post('/api/mail', (req, res) => {
 
   const file = req.fields.file;
 
-  res.redirect(301, "/thanks");
+  res.redirect(301, "/mailer");
 
   // Create mail options
   let mailOptions = {

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
-  <title>Searchy</title>
+  <head>
+  <title>Make your own mailer!</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="searchy.css">
@@ -11,32 +10,41 @@
 
 <body>
 
-  <header>
-    <h1 class="Title">Search for Voters</h1>
+  
+  <div class="titlebar">
+    <h1>Make your own mailer!</h1>
+  </div>
+  <div class="unitelogo">
+
+  <img src="unite%20dark%20background%20logo.svg">
+
+</div><header>
+    <h2 class="Title">WELCOME!</h2>
+    
+    <p>You can use this app to build <strong>personal mailer</strong> for your friends around Allegheny County.
+
+</p>
+    <p>
+      You can use this app to support any of the following:
+
+      </p><ul>- The <a href="https://www.uniteforpa.com/slateofeight">Slate of Eight</a></ul>
+      <ul>- Ed Gainey</ul>
+      <ul>- Jehosha Wright, Hilary Bendik, or Demetrius Baldwin for Magistrate</ul>
+    <p>
+      TO GET STARTED: fill out the form below, submit, and then click the "Continue to Step 2" button at the bottom of the page.
+    </p><p></p>
   </header>
 
-  <div class="Wrapper Wrapper--loading">
-    <svg class="Spinner">
-      <circle cx="20" cy="20" r="18"></circle>
-    </svg>
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdyIUHPLzAfrkkI3kMBrdvCPhJq-zZN1BjhEcBd0wGzNkEKLw/viewform?embedded=true" marginheight="0" marginwidth="0" width="100%" height="2100" frameborder="0">Loading…</iframe>
+  <br>
+  <a href="/voters" class="Button" data-js="proceed-button">Continue to Step 2: Building Your List</a>
 
-    <div class="SearchWrapper">
-      <label for="name">Search by Name</label>
-      <input class="Input" data-js="input-name" name="name" placeholder="Enter at least three letters">
-      <table class="Results" data-js="name-results"></table>
-    </div>
-
-    <div class="SearchWrapper">
-      <label for="address">Search by Address</label>
-      <input class="Input" data-js="input-address" name="address" placeholder="Enter at least three letters">
-      <table class="Results" data-js="address-results"></table>
-    </div>
+  <div class="floaty-button">
+    <a href="/voters" class="Button Button--white" data-js="proceed-button">Continue to Step 2: Building Your List</a>
   </div>
 
-  <button data-js="export-button">Export List</button>
 
-  <script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
-  <script type="text/javascript" src="searchy.js"></script>
+
 </body>
 
 </html>

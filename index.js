@@ -1,178 +1,131 @@
-import * as csv from "csvtojson";
-import { voters } from './voters.js';
-import { deburr } from 'lodash';
+const express = require("express");
+const formidableMiddleware = require('express-formidable');
+const nodemailer = require("nodemailer");
+const app = express();
+const port = process.env.PORT || 8000;
 
-const FIRST_NAME = 'First';
-const LAST_NAME = 'Last';
-const ADDRESS = 'Address';
-const CITY = 'City';
-const ZIP = 'Zip';
-const VOTERID = 'Voter id';
+const { Client } = require("pg");
 
-function processVoterData() {
-    return csv.csv().fromString(voters)
-        .then((json) => {
-            return json;
-        });
-};
+const client = new Client({
+  connectionString: 
+    process.env.DATABASE_URL || "postgres://sean@localhost:5432/bernard-local",
+  ssl: { rejectUnauthorized: false },
+});
 
-function queryMatchesVoterField({ normalizedQuery, voter, field }) {
-    return normalizeString(voter[field]).indexOf(normalizedQuery) !== -1;
-}
+client.connect((err) => {
+  if (err) {
+    console.error("connection error", err.stack);
+  } else {
+    console.log("connected");
+  }
+});
 
-function searchByName({ query, voters }) {
-    if (query.length < 3) return [];
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded());
 
-    const fields = Object.keys(voters[0]);
-    const numVoters = voters.length;
-    const matches = [];
+app.use(express.static("public"));
+app.use(formidableMiddleware());
 
-    const normalizedQuery = normalizeString(query);
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
-    for (let i = 0; i < numVoters; i++) {
-        const voter = voters[i];
+app.get("/voters", (req, res) => {
+  res.sendFile(__dirname + "/voters.html");
+});
 
-        if (queryMatchesVoterField({ normalizedQuery, voter, field: FIRST_NAME }) || queryMatchesVoterField({ normalizedQuery, voter, field: LAST_NAME })) {
-            matches.push(voter);
-        }
+app.get("/thanks", (req, res) => {
+  res.sendFile(__dirname + "/thanks.html");
+});
+
+
+// this whole query is immensely vulnerable to SQL injection
+// but it's fine
+app.get("/query", async (req, res) => {
+  let url = req.url;
+  let where = "";
+
+  // If the query is a name query, search the first name, last name fields
+  if (url.includes("?name")) {
+    let param = url.split("=");
+    const name = decodeURI(param[1].toUpperCase()).trim();
+    let firstName, lastName;
+    // if space, split and search first and last name
+    if (name.includes(" ")) {
+      firstName = name.split(" ")[0];
+      lastName = name.split(" ")[1];
     }
+    where +=
+      ' WHERE "First Name" LIKE ' +
+      "'%" +
+      (firstName || name) +
+      "%'" +
+      (firstName ? ' AND "Last Name" LIKE ' : ' OR "Last Name" LIKE ') +
+      "'%" +
+      (lastName || name) +
+      "%' ";
+    // console.log(where);
+    // If the query is an address query, search by street name
+  } else if (url.includes("?address")) {
+    let param = url.split("=");
+    where +=
+      ' WHERE "Street Name" LIKE ' + "'%" + param[1].toUpperCase() + "%' ";
+  }
 
-    return matches;
-}
+  // Construct the query
+  let query =
+    'SELECT "Last Name", "First Name", "Gender", "Party Code", "House Number" || "House Number Suffix" AS "House Number", "Street Name", "City", "Zip", "Home Phone", "ID Number" FROM ' +
+    '"public"."ALLEGHENY FVE 20210329"' +
+    where +
+    'ORDER BY "Last Name", "First Name" LIMIT 50;';
 
-function searchByAddress({ query, voters }) {
-    if (query.length < 3) return [];
+  const queryres = await client.query(query);
 
-    const fields = Object.keys(voters[0]);
-    const numVoters = voters.length;
-    const matches = [];
+  res.json(queryres.rows);
+});
 
-    const normalizedQuery = normalizeString(query);
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});
 
-    for (let i = 0; i < numVoters; i++) {
-        const voter = voters[i];
+app.post('/api/mail', (req, res) => {
+  // Create a transporter to send the mail
+  let transporter = nodemailer.createTransport({
+      pool: true,
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // use TLS
+      auth: {
+        user: "field@uniteforpa.com",
+        pass: "iymesczsuixgltnk"
+      }
+  });
 
-        if (queryMatchesVoterField({ normalizedQuery, voter, field: ADDRESS }) || queryMatchesVoterField({ normalizedQuery, voter, field: CITY }) || queryMatchesVoterField({ normalizedQuery, voter, field: ZIP })) {
-            matches.push(voter);
+  const file = req.fields.file;
+
+  res.redirect(301, "/thanks");
+
+  // Create mail options
+  let mailOptions = {
+      from: 'Searchy',
+      to: "field@uniteforpa.com",
+      subject: "Voterfile",
+      text: "Voter file",
+      attachments: [
+        {
+          filename: "voters.csv",
+          content: file,
         }
-    }
+      ]
+  }
 
-    return matches;
-}
-
-function renderResults(results) {
-    if (!results.length) return '';
-
-    return `
-    <thead class="Results-header">
-        <tr><th class="Results-header_cell"></th>${Object.keys(results[0]).filter((value) => value !== 'isSelected').map((key) => `<th class="Results-header_cell">${key}</th>`).join('')}</tr>
-    </thead>
-    <tbody>
-        ${results.map((result) => `<tr class="Results-row"><td class="Results-row_cell"><input type="checkbox" data-id="${result[VOTERID]}" ${result.isSelected ? 'checked' : ''}></td>${Object.keys(result).filter((value) => value !== 'isSelected').map((key) => `<td class="Results-row_cell">${result[key]}</td>`).join('')}</tr>`).join('')}
-    </tbody>
-    `
-}
-
-function normalizeString(string) {
-    return deburr(string.toLocaleLowerCase());
-}
-
-function exportResults(voters) {
-    const selections = voters.filter((voter) => voter.isSelected).map((voter) => {
-        delete voter.isSelected; return voter;
-    });
-    exportCSVFile(selections)
-}
-
-function convertToCSV(objArray) {
-    const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
-    let str = '';
-
-    for (let i = 0; i < array.length; i++) {
-        let line = '';
-        for (let index in array[i]) {
-            if (line != '') line += ','
-            line += array[i][index];
-        }
-
-        str += line + '\r\n';
-    }
-
-    return str;
-}
-
-function exportCSVFile(items) {
-    const jsonObject = JSON.stringify(items);
-
-    const csv = convertToCSV(jsonObject);
-
-    const exportedFilename = 'voters.csv';
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, exportedFilename);
-    } else {
-        const link = document.createElement("a");
-        if (link.download !== undefined) { // feature detection
-            // Browsers that support HTML5 download attribute
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exportedFilename);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-}
-
-function init() {
-    processVoterData().then((voters) => {
-        let nameQuery = '';
-        let addressQuery = '';
-
-        document.querySelector('.Wrapper--loading').classList.remove('Wrapper--loading');
-        document.querySelector('[data-js="input-name"]').addEventListener('keyup', (e) => {
-            nameQuery = e.target.value;
-            document.querySelector('[data-js="name-results"]').innerHTML = renderResults(searchByName({ query: nameQuery, voters }));
-        });
-        document.querySelector('[data-js="input-address"]').addEventListener('keyup', (e) => {
-            addressQuery = e.target.value;
-            document.querySelector('[data-js="address-results"]').innerHTML = renderResults(searchByAddress({ query: addressQuery, voters }));
-        });
-        document.querySelector('[data-js="name-results"]').addEventListener('change', (e) => {
-            if (e.target.matches('input')) {
-                const id = e.target.dataset.id;
-                const voter = voters.find((v) => v[VOTERID] === id);
-                if (e.target.checked) {
-                    voter.isSelected = true;
-                } else {
-                    voter.isSelected = false;
-                }
-
-                document.querySelector('[data-js="address-results"]').innerHTML = renderResults(searchByAddress({ query: addressQuery, voters }));
-            }
-        });
-        document.querySelector('[data-js="address-results"]').addEventListener('change', (e) => {
-            if (e.target.matches('input')) {
-                const id = e.target.dataset.id;
-                const voter = voters.find((v) => v[VOTERID] === id);
-                if (e.target.checked) {
-                    voter.isSelected = true;
-                } else {
-                    voter.isSelected = false;
-                }
-
-                document.querySelector('[data-js="name-results"]').innerHTML = renderResults(searchByName({ query: nameQuery, voters }));
-            }
-        });
-        document.querySelector('[data-js="export-button"]').addEventListener('click', (e) => {
-            exportResults(voters);
-        });
-    });
-}
-
-init();
-
-
-
+  // Send the message
+  transporter.sendMail(mailOptions, function (err, res) {
+      if(err){
+          console.log('Error');
+      } else {
+          console.log('Email Sent');
+      }
+  })
+});

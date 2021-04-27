@@ -21,11 +21,7 @@
 
 </div><header>
     <h2 class="Title">FIND YOUR FRIENDS!</h2>
-    
-    <p>You are now going to make a list of everyone who you'd like to send a personal mailer to about the election! </p>
-    <p><strong>Casual acquaintances are ok - remember, the vast majority of people have no information about most races this year!</strong> </p>
-    <p>Before you start searching, enter your email address. This is essential for the tool to work.</p>
-    <p>To search by first and last name: just type, for example, "John Smith".</p>
+    <p>You are now going to make a list of everyone who you'd like to send a personal mailer to about the election! <strong>Casual acquaintances are ok - remember, the vast majority of people have no information about most races this year!</strong> </p>
   </header>
 
   <div class="Wrapper Wrapper--loading">
@@ -41,18 +37,16 @@
     <div class="SavedWrapper SavedWrapper--hidden">
       <h3>Your Saved Voters</h3>
       <table class="Results" data-js="saved-voters"></table>
-      <button class="Button" data-js="export-button">Submit</button>
+      <button class="Button" data-js="export-button">Submit (Click when Finished)</button>
       <div class="Thanks">
-        <p>Thanks for sending us some voters!</p>
         <p data-js="saved-count"></p>
         <p>Try to get at least 20 voters. If you send us 50 we will send you a special surprise!</p>
       </div>
     </div>
 
     <div class="SearchWrapper SearchWrapper--hidden">
-      <label for="name">Step 2: Search by Name</label>
-      <input class="Input" data-js="input-name" name="name">
-      <button class="Button" data-js="search-button">Search</button>
+      <label for="name">Step 2: Search by Name (To search by first and last name: just type, for example, "John Smith")</label>
+      <input class="Input" data-js="input-name" name="name" placeholder="Enter at least three letters">
       <table class="Results" data-js="name-results"></table>
     </div>
   </div>

@@ -87,14 +87,16 @@ p {
     border-color: $lightBlue;
     font-family: inherit;
     border-radius: 5px;
+    width: 220px;
 }
 
 .SearchWrapper, .SavedWrapper {
     padding: 12px 12px 36px 12px;
     overflow-x: auto;
+
     label {
-        width: 170px;
-        display: inline-block;
+        display: block;
+        padding-bottom: 12px;
     }
 }
 
@@ -169,13 +171,13 @@ h1 {
     width: 100vw;
     background-color: $lightBlue;
     height: 80px;
+    text-align: center;
 }
 
 .floaty-button .Button {
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    top: 35%;
+    display: inline-block;
+    margin-left: 14px;
+    margin-right: 14px;
 }
 
 svg.Spinner {

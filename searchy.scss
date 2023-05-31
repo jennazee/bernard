@@ -88,13 +88,14 @@ p {
     font-family: inherit;
     border-radius: 5px;
     width: 220px;
+    margin-bottom: 18px;
 }
 
 .SearchWrapper, .SavedWrapper {
-    padding: 12px 12px 36px 12px;
+    padding: 12px 12px 24px 12px;
     overflow-x: auto;
 
-    label {
+    label, span {
         display: block;
         padding-bottom: 12px;
     }

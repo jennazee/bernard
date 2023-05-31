@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-
 <html>
   <head>
-  <title>Make your own mailer!</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="searchy.css">
-  <script type="text/javascript" src="script.js"></script>
-</head>
-
-<body>
-
-  
-  <div class="titlebar">
-    <h1>Make your own mailer!</h1>
-  </div>
-  <div class="unitelogo">
-
-  <img src="unite%20dark%20background%20logo.svg">
-
-</div><header>
-    <h2 class="Title">FIND YOUR FRIENDS!</h2>
-    <p>You are now going to make a list of everyone who you'd like to send a personal mailer to about the election! <strong>Casual acquaintances are ok - remember, the vast majority of people have no information about most races this year!</strong> </p>
-  </header>
-
-  <div class="Wrapper Wrapper--loading">
-    <svg class="Spinner">
-      <circle cx="20" cy="20" r="18"></circle>
-    </svg>
-
-    <div class="SearchWrapper">
-      <label for="email">Step 1: Enter Your Email</label>
-      <input class="Input" data-js="input-email" name="email" placeholder="Your email">
+    <title>Make your own mailer!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="searchy.css">
+    <script type="text/javascript" src="script.js"></script>
+  </head>
+  <body>
+    <div class="titlebar">
+      <h1>Make your own mailer!</h1>
     </div>
-
-    <div class="SavedWrapper SavedWrapper--hidden">
-      <h3>Your Saved Voters</h3>
-      <table class="Results" data-js="saved-voters"></table>
-      <button class="Button" data-js="export-button">Submit (Click when Finished)</button>
-      <div class="Thanks">
-        <p data-js="saved-count"></p>
-        <p>Try to get at least 20 voters. If you send us 50 we will send you a special surprise!</p>
+    <div class="unitelogo">
+      <img src="unite%20dark%20background%20logo.svg">
+    </div>
+    <header>
+      <h2 class="Title">FIND YOUR FRIENDS!</h2>
+      <p>You are now going to make a list of everyone who you'd like to send a personal mailer to about the election! <strong>Casual acquaintances are ok - remember, the vast majority of people have no information about most races this year!</strong>
+      </p>
+    </header>
+    <div class="Wrapper Wrapper--loading">
+      <svg class="Spinner">
+        <circle cx="20" cy="20" r="18"></circle>
+      </svg>
+      <div class="SearchWrapper">
+        <label for="email">Step 1: Enter Your Email</label>
+        <input class="Input" data-js="input-email" name="email" placeholder="Your email">
+      </div>
+      <div class="SavedWrapper SavedWrapper--hidden">
+        <h3>Your Saved Voters</h3>
+        <table class="Results" data-js="saved-voters"></table>
+        <button class="Button" data-js="export-button">Submit (Click when Finished)</button>
+        <div class="Thanks">
+          <p data-js="saved-count"></p>
+          <p>Try to get at least 20 voters. If you send us 50 we will send you a special surprise!</p>
+        </div>
+      </div>
+      <div class="SearchWrapper SearchWrapper--hidden">
+        <label for="name">Step 2: Search by Name (To search by first and last name: just type, for example, "John Smith")</label>
+        <input class="Input" data-js="input-name" name="name" placeholder="Enter at least three letters">
+        <table class="Results" data-js="name-results"></table>
       </div>
     </div>
-
-    <div class="SearchWrapper SearchWrapper--hidden">
-      <label for="name">Step 2: Search by Name (To search by first and last name: just type, for example, "John Smith")</label>
-      <input class="Input" data-js="input-name" name="name" placeholder="Enter at least three letters">
-      <table class="Results" data-js="name-results"></table>
-    </div>
-  </div>
-</body>
-
+  </body>
 </html>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "/convex/_generated/react";
 import { Voter } from "./voter-type";
 
-const tableColumns = ['First', 'Last', 'Street']
+const tableColumns = ['First', 'Last', 'Street', 'City']
 const EMPTY_ARRAY = [];
 
 export default function App() {

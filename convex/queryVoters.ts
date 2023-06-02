@@ -13,7 +13,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                 .gte("First", normalizedFirstQuery)
                 .lt("First", getTopBoundForQuery(normalizedFirstQuery))
         )
-        .collect();
+        .take(8192);
         return voters;
     }
 
@@ -24,7 +24,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                 .gte("Last", normalizedLastQuery)
                 .lt("Last", getTopBoundForQuery(normalizedLastQuery))
         )
-        .collect();
+        .take(8192);
         return voters;
     }
 
@@ -37,7 +37,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             )
             .filter(q => q.gte(q.field("Last"), normalizedLastQuery))
             .filter(q => q.lt(q.field("Last"), getTopBoundForQuery(normalizedLastQuery)))
-            .collect();
+            .take(8192);
         return voters;
     }
 });

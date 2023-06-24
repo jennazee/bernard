@@ -22,7 +22,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
         }
     }
 
-    // if we only have a first name
+    // if we only have a last name
     if (!normalizedFirstQuery.length && normalizedLastQuery.length >= 3) {
         try {
             const voters = await db.query("voters")
@@ -40,7 +40,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
 
     if (normalizedFirstQuery.length + normalizedLastQuery.length >= 3) {
     try {
-        console.log('Searching for voters first > last for query', normalizedFirstQuery, normalizedLastQuery)
+        console.log(`Searching for voters first > last for query ${normalizedFirstQuery} ${normalizedLastQuery}`)
         const voters = await db.query("voters")
             .withIndex("by_first", q =>
                 q
@@ -52,7 +52,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .take(8192);
             return {results: voters, status: 'ok'};
         } catch (error) {
-            console.log('Searching for voters last > first for query', normalizedFirstQuery, normalizedLastQuery)
+            console.log(`Searching for voters last > first for query for ${normalizedFirstQuery} ${normalizedLastQuery}`)
             try {
                 const voters = await db.query("voters")
                 .withIndex("by_last", q =>
@@ -65,12 +65,24 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                 .take(8192);
                 return {results: voters, status: 'ok'};
             } catch (error) {
-                return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+                console.log(`Trying an exact match query for ${normalizedFirstQuery} ${normalizedLastQuery}`)
+                try {
+                    const voters = await db.query("voters")
+                    .withIndex("by_first_last", q =>
+                        q
+                        .eq("First", normalizedFirstQuery)
+                        .eq("Last", normalizedLastQuery)
+                    )
+                    .take(8192);
+                    return {results: voters, status: 'ok'};
+                } catch (error) {
+                    return {results: [], status: 'error', message: "We can't seem to get results for this query. Please try another query, or searching for just first or just last name"};
+                }
             }
         }
     }
 
-    return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+    return {results: [], status: 'error', message: 'Please try a longer query'};
 });
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

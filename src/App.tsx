@@ -80,7 +80,7 @@ export default function App() {
         <span>{message}</span>
       </div>)
     }
-    if (!results.length) {
+    if ((firstNameQuery.length || lastNameQuery.length) && !results.length) {
       return (<div className="Wrapper">
         <span>{'No results'}</span>
       </div>)

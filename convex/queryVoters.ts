@@ -51,7 +51,20 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .take(8192);
             return {results: voters, status: 'ok'};
         } catch (error) {
-            return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+            try {
+                const voters = await db.query("voters")
+                .withIndex("by_last", q =>
+                    q
+                    .gte("Last", normalizedLastQuery)
+                    .lt("Last", getTopBoundForQuery(normalizedLastQuery))
+                )
+                .filter(q => q.gte(q.field("First"), normalizedFirstQuery))
+                .filter(q => q.lt(q.field("First"), getTopBoundForQuery(normalizedFirstQuery)))
+                .take(8192);
+                return {results: voters, status: 'ok'};
+            } catch (error) {
+                return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+            }
         }
     }
 

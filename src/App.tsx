@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "/convex/_generated/react";
 import { Voter } from "./voter-type";
 
 const tableColumns = ['First', 'Last', 'Street', 'City']
-const EMPTY_ARRAY = [];
+const EMPTY_RESULTS = { results: [] };
 
 export default function App() {
   const [firstNameQuery, setFirstNameQuery] = useState("");
@@ -12,7 +12,7 @@ export default function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [email, setEmail] = useState("");
   const [tempVoters, setTempVoters] = useState({});
-  const {results, status, message}: {results: Voter[], status: string, message?: string} = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || {results: EMPTY_ARRAY};
+  const {results, message}: {results: Voter[], status: string, message?: string} = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || EMPTY_RESULTS;
   const saveSelections = useMutation('saveVotersForEmail');
 
   useEffect(() => {

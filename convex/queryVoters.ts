@@ -40,6 +40,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
 
     if (normalizedFirstQuery.length + normalizedLastQuery.length >= 3) {
     try {
+        console.log('Searching for voters first > last for query', normalizedFirstQuery, normalizedLastQuery)
         const voters = await db.query("voters")
             .withIndex("by_first", q =>
                 q
@@ -51,6 +52,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .take(8192);
             return {results: voters, status: 'ok'};
         } catch (error) {
+            console.log('Searching for voters last > first for query', normalizedFirstQuery, normalizedLastQuery)
             try {
                 const voters = await db.query("voters")
                 .withIndex("by_last", q =>

@@ -80,6 +80,11 @@ export default function App() {
         <span>{message}</span>
       </div>)
     }
+    if (!results.length) {
+      return (<div className="Wrapper">
+        <span>{'No results'}</span>
+      </div>)
+    }
     return (results[0] && <table className="Results" data-js="name-results">
       <thead className="Results-header">
         <tr>

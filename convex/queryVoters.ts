@@ -1,6 +1,8 @@
 import { query } from "./_generated/server";
 
-const E_TOO_MANY_RESULTS = 'There were too many results. Please narrow your query.'
+const TOO_MANY_RESULTS_RESPONSE = {results: [], status: 'error', message: 'There were too many results. Please narrow your query.'};
+const QUERY_TOO_SHORT_RESPONSE = {results: [], status: 'error', message: 'Please try a longer query'};
+const UNKNOWN_ERROR_RESPONSE = {results: [], status: 'error', message: "We can't seem to get results for this query. Please try another query, or searching for just first or just last name"};
 
 export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
     const normalizedFirstQuery = normalizeQuery(firstNameQuery);
@@ -18,7 +20,8 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .take(8192);
             return {results: voters, status: 'ok'};
         } catch (error) {
-            return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+            console.error(error)
+            return TOO_MANY_RESULTS_RESPONSE;
         }
     }
 
@@ -34,7 +37,8 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .take(8192);
             return {results: voters, status: 'ok'};
         } catch (error) {
-            return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+            console.error(error)
+            return TOO_MANY_RESULTS_RESPONSE;
         }
     }
 
@@ -76,13 +80,14 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                     .take(8192);
                     return {results: voters, status: 'ok'};
                 } catch (error) {
-                    return {results: [], status: 'error', message: "We can't seem to get results for this query. Please try another query, or searching for just first or just last name"};
+                    console.error(error);
+                    return UNKNOWN_ERROR_RESPONSE;
                 }
             }
         }
     }
 
-    return {results: [], status: 'error', message: 'Please try a longer query'};
+    return QUERY_TOO_SHORT_RESPONSE;
 });
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

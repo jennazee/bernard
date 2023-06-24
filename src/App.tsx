@@ -4,28 +4,21 @@ import { useMutation, useQuery } from "/convex/_generated/react";
 import { Voter } from "./voter-type";
 
 const tableColumns = ['First', 'Last', 'Street', 'City']
-const EMPTY_RESULTS = { results: [] };
+const EMPTY_RESULTS = { results: [], message: 'Loading...' };
 
 export default function App() {
   const [firstNameQuery, setFirstNameQuery] = useState("");
   const [lastNameQuery, setLastNameQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const [email, setEmail] = useState("");
   const [tempVoters, setTempVoters] = useState({});
   const {results, message}: {results: Voter[], status: string, message?: string} = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || EMPTY_RESULTS;
   const saveSelections = useMutation('saveVotersForEmail');
 
-  useEffect(() => {
-    setIsSearching(false);
-  }, [results])
-
   const handleFirstNameChange = useCallback(debounce((event) => {
     setFirstNameQuery(event.target.value);
-    setIsSearching(true);
   }, 200));
   const handleLastNameChange =  useCallback(debounce((event) => {
     setLastNameQuery(event.target.value);
-    setIsSearching(true);
   }, 200));
 
   const addToTempVoterList = (voter: Voter) => {
@@ -70,7 +63,7 @@ export default function App() {
   }
 
   const renderSearchList = () => {
-    if (isSearching) {
+    if ((firstNameQuery.length || lastNameQuery.length) && message === 'Loading...') {
       return <div className="Wrapper"><svg className="Spinner">
         <circle cx="20" cy="20" r="18"></circle>
       </svg></div>
@@ -80,6 +73,7 @@ export default function App() {
         <span>{message}</span>
       </div>)
     }
+    console.log(results)
     if ((firstNameQuery.length || lastNameQuery.length) && !results.length) {
       return (<div className="Wrapper">
         <span>{'No results'}</span>

@@ -12,21 +12,21 @@ export default function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [email, setEmail] = useState("");
   const [tempVoters, setTempVoters] = useState({});
-  const voters: Voter[] = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || EMPTY_ARRAY;
+  const {results, status, message}: {results: Voter[], status: string, message?: string} = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || {results: EMPTY_ARRAY};
   const saveSelections = useMutation('saveVotersForEmail');
 
   useEffect(() => {
     setIsSearching(false);
-  }, [voters])
+  }, [results])
 
   const handleFirstNameChange = useCallback(debounce((event) => {
     setFirstNameQuery(event.target.value);
     setIsSearching(true);
-  }));
+  }, 200));
   const handleLastNameChange =  useCallback(debounce((event) => {
     setLastNameQuery(event.target.value);
     setIsSearching(true);
-  }));
+  }, 200));
 
   const addToTempVoterList = (voter: Voter) => {
     const voterId = voter.state_file_id;
@@ -75,14 +75,19 @@ export default function App() {
         <circle cx="20" cy="20" r="18"></circle>
       </svg></div>
     }
-    return (voters[0] && <table className="Results" data-js="name-results">
+    if ((firstNameQuery.length || lastNameQuery.length) && message) {
+      return (<div className="Wrapper">
+        <span>{message}</span>
+      </div>)
+    }
+    return (results[0] && <table className="Results" data-js="name-results">
       <thead className="Results-header">
         <tr>
           <th className="Results-header_cell"></th>{tableColumns.map((column) => <th className="Results-header_cell">{column}</th>)}
         </tr>
       </thead>
       <tbody>
-        {voters.map((voter: Voter) => (
+        {results.map((voter: Voter) => (
           <tr className="Results-row" key={voter.state_file_id.toString()}>
             <td className="Results-row_cell">
               <button type="button" onClick={() => addToTempVoterList(voter)}>Add to my list</button>

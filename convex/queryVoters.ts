@@ -1,34 +1,47 @@
 import { query } from "./_generated/server";
 
+const E_TOO_MANY_RESULTS = 'There were too many results. Please narrow your query.'
+
 export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
     const normalizedFirstQuery = normalizeQuery(firstNameQuery);
     const normalizedLastQuery = normalizeQuery(lastNameQuery);
 
+    // if we only have a first name
     if (normalizedFirstQuery.length >= 3 && !normalizedLastQuery.length) {
-        const voters = await db.query("voters")
+        try {
+            const voters = await db.query("voters")
             .withIndex("by_first", q =>
             q
                 .gte("First", normalizedFirstQuery)
                 .lt("First", getTopBoundForQuery(normalizedFirstQuery))
-        )
-        .take(8192);
-        return voters;
+            )
+            .take(8192);
+            return {results: voters, status: 'ok'};
+        } catch (error) {
+            return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+        }
     }
 
+    // if we only have a first name
     if (!normalizedFirstQuery.length && normalizedLastQuery.length >= 3) {
-        const voters = await db.query("voters")
-            .withIndex("by_last", q =>
-            q
-                .gte("Last", normalizedLastQuery)
-                .lt("Last", getTopBoundForQuery(normalizedLastQuery))
-        )
-        .take(8192);
-        return voters;
+        try {
+            const voters = await db.query("voters")
+                .withIndex("by_last", q =>
+                q
+                    .gte("Last", normalizedLastQuery)
+                    .lt("Last", getTopBoundForQuery(normalizedLastQuery))
+            )
+            .take(8192);
+            return {results: voters, status: 'ok'};
+        } catch (error) {
+            return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+        }
     }
 
     if (normalizedFirstQuery.length + normalizedLastQuery.length >= 3) {
+    try {
         const voters = await db.query("voters")
-            .withIndex("by_first_last", q =>
+            .withIndex("by_first", q =>
                 q
                 .gte("First", normalizedFirstQuery)
                 .lt("First", getTopBoundForQuery(normalizedFirstQuery))
@@ -36,10 +49,13 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .filter(q => q.gte(q.field("Last"), normalizedLastQuery))
             .filter(q => q.lt(q.field("Last"), getTopBoundForQuery(normalizedLastQuery)))
             .take(8192);
-        return voters;
+            return {results: voters, status: 'ok'};
+        } catch (error) {
+            return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
+        }
     }
 
-    return [];
+    return {results: [], status: 'error', message: E_TOO_MANY_RESULTS};
 });
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

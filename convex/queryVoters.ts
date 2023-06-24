@@ -4,8 +4,6 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
     const normalizedFirstQuery = normalizeQuery(firstNameQuery);
     const normalizedLastQuery = normalizeQuery(lastNameQuery);
 
-    if (normalizedFirstQuery.length + normalizedLastQuery.length < 3) return [];
-
     if (normalizedFirstQuery.length >= 3 && !normalizedLastQuery.length) {
         const voters = await db.query("voters")
             .withIndex("by_first", q =>
@@ -40,6 +38,8 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
             .take(8192);
         return voters;
     }
+
+    return [];
 });
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

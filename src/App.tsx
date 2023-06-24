@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { debounce } from 'lodash';
 import { useMutation, useQuery } from "/convex/_generated/react";
 import { Voter } from "./voter-type";
 
@@ -8,11 +9,24 @@ const EMPTY_ARRAY = [];
 export default function App() {
   const [firstNameQuery, setFirstNameQuery] = useState("");
   const [lastNameQuery, setLastNameQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [email, setEmail] = useState("");
   const [tempVoters, setTempVoters] = useState({});
-  const votersByFirst: Voter[] = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || EMPTY_ARRAY;
+  const voters: Voter[] = useQuery("queryVoters", { firstNameQuery, lastNameQuery }) || EMPTY_ARRAY;
+  const saveSelections = useMutation('saveVotersForEmail');
 
-  const saveSelections = useMutation('saveVotersForEmail')
+  useEffect(() => {
+    setIsSearching(false);
+  }, [voters])
+
+  const handleFirstNameChange = useCallback(debounce((event) => {
+    setFirstNameQuery(event.target.value);
+    setIsSearching(true);
+  }));
+  const handleLastNameChange =  useCallback(debounce((event) => {
+    setLastNameQuery(event.target.value);
+    setIsSearching(true);
+  }));
 
   const addToTempVoterList = (voter: Voter) => {
     const voterId = voter.state_file_id;
@@ -56,23 +70,28 @@ export default function App() {
   }
 
   const renderSearchList = () => {
-    return (votersByFirst[0] && <table className="Results" data-js="name-results">
-    <thead className="Results-header">
-      <tr>
-        <th className="Results-header_cell"></th>{tableColumns.map((column) => <th className="Results-header_cell">{column}</th>)}
-      </tr>
-    </thead>
-    <tbody>
-      {votersByFirst.map((voter: Voter) => (
-        <tr className="Results-row" key={voter.state_file_id.toString()}>
-          <td className="Results-row_cell">
-            <button type="button" onClick={() => addToTempVoterList(voter)}>Add to my list</button>
-          </td>
-          {tableColumns.map((column) => <td className="Results-row_cell">{voter[column]}</td>)}
-        </tr> 
-      ))}
-    </tbody>
-  </table>)
+    if (isSearching) {
+      return <div className="Wrapper"><svg className="Spinner">
+        <circle cx="20" cy="20" r="18"></circle>
+      </svg></div>
+    }
+    return (voters[0] && <table className="Results" data-js="name-results">
+      <thead className="Results-header">
+        <tr>
+          <th className="Results-header_cell"></th>{tableColumns.map((column) => <th className="Results-header_cell">{column}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {voters.map((voter: Voter) => (
+          <tr className="Results-row" key={voter.state_file_id.toString()}>
+            <td className="Results-row_cell">
+              <button type="button" onClick={() => addToTempVoterList(voter)}>Add to my list</button>
+            </td>
+            {tableColumns.map((column) => <td className="Results-row_cell">{voter[column]}</td>)}
+          </tr> 
+        ))}
+      </tbody>
+    </table>)
   }
 
   return (
@@ -97,16 +116,14 @@ export default function App() {
           className="Input"
           name="first-name"
           placeholder="Enter at least three letters"
-          value={firstNameQuery}
-          onChange={event => setFirstNameQuery(event.target.value)}
+          onChange={handleFirstNameChange}
         />
         <label htmlFor="last-name">Last name</label>
         <input
           className="Input"
           name="last-name"
           placeholder="Enter at least three letters"
-          value={lastNameQuery}
-          onChange={event => setLastNameQuery(event.target.value)}
+          onChange={handleLastNameChange}
         />
         {renderSearchList()}
       </div>

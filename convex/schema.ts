@@ -14,5 +14,6 @@ export default defineSchema({
   })
   .index("by_first", ["First"])
   .index("by_last", ["Last"])
-  .index("by_first_last", ["First", "Last"]),
+  .index("by_first_last", ["First", "Last"])
+  .index("by_last_first", ["Last", "First"]),
 });

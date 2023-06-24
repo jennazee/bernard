@@ -69,7 +69,7 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                 .take(8192);
                 return {results: voters, status: 'ok'};
             } catch (error) {
-                console.log(`Trying an exact match query for ${normalizedFirstQuery} ${normalizedLastQuery}`)
+                console.log(`Trying an exact match query on first_last for ${normalizedFirstQuery} ${normalizedLastQuery}`)
                 try {
                     const voters = await db.query("voters")
                     .withIndex("by_first_last", q =>
@@ -80,8 +80,20 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                     .take(8192);
                     return {results: voters, status: 'ok'};
                 } catch (error) {
-                    console.error(error);
-                    return UNKNOWN_ERROR_RESPONSE;
+                    console.log(`Trying an exact match query on last_first for ${normalizedFirstQuery} ${normalizedLastQuery}`)
+                    try {
+                        const voters = await db.query("voters")
+                        .withIndex("by_last_first", q =>
+                            q
+                            .eq("Last", normalizedFirstQuery)
+                            .eq("First", normalizedLastQuery)
+                        )
+                        .take(8192);
+                        return {results: voters, status: 'ok'};
+                    } catch (error) {
+                        console.error(error);
+                        return UNKNOWN_ERROR_RESPONSE;
+                    }
                 }
             }
         }

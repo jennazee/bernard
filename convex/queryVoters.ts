@@ -85,8 +85,8 @@ export default query(async ({ db }, { firstNameQuery, lastNameQuery }) => {
                         const voters = await db.query("voters")
                         .withIndex("by_last_first", q =>
                             q
-                            .eq("Last", normalizedFirstQuery)
-                            .eq("First", normalizedLastQuery)
+                            .eq("Last", normalizedLastQuery)
+                            .eq("First", normalizedFirstQuery)
                         )
                         .take(8192);
                         return {results: voters, status: 'ok'};
